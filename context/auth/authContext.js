@@ -16,6 +16,10 @@ const AuthProvider = ({ children }) => {
 
 	const [state, dispatch] = useReducer(authReducer, initialState)
 
+  const registerUser = data => {
+    console.log('desde registerUser')
+  }
+
   const userAuthenticated = name => {
     dispatch({
       type: USER_AUTHENTICATE,
@@ -31,6 +35,7 @@ const AuthProvider = ({ children }) => {
 				user: state.user,
 				message: state.message,
 				userAuthenticated,
+				registerUser,
 			}}>
 			{children}
 		</AuthContext.Provider>

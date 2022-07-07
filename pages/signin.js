@@ -2,8 +2,12 @@ import React from 'react'
 import Layout from '../components/layout'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import useAuth from '../context/auth/authState'
 
 const SignIn = () => {
+
+	const { userAuthenticated, registerUser } = useAuth()
+
 	const formik = useFormik({
 		initialValues: {
 			name: '',
@@ -24,7 +28,7 @@ const SignIn = () => {
 				.min(6, 'La contraseña debe contener al menos 6 caracteres'),
 		}),
 		onSubmit: (values) => {
-			console.log('Enviando formulario', values)
+			registerUser(values)
 		},
 	})
 
