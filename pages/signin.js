@@ -4,9 +4,11 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import useAuth from '../context/auth/authState'
 
+import Alert from '../components/alert'
+
 const SignIn = () => {
 
-	const { userAuthenticated, registerUser } = useAuth()
+	const { userAuthenticated, registerUser, message } = useAuth()
 
 	const formik = useFormik({
 		initialValues: {
@@ -40,6 +42,9 @@ const SignIn = () => {
 				</h2>
 				<div className='flex justify-center mt-5'>
 					<div className='w-full max-w-lg'>
+
+						{ message && <Alert /> }
+
 						<form
 							className='bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4'
 							onSubmit={formik.handleSubmit}>
