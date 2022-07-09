@@ -1,6 +1,7 @@
 import { createContext, useReducer } from 'react'
 import authReducer from './authReducer'
 import clientAxios from '../../config/clientAxios'
+import tokenAuth from '../../config/tokenAuth'
 
 import {
 	USER_AUTHENTICATE,
@@ -68,11 +69,22 @@ const AuthProvider = ({ children }) => {
 		}
 	}
 
-	const userAuthenticated = (name) => {
-		dispatch({
-			type: USER_AUTHENTICATE,
-			payload: name,
-		})
+	const userAuthenticated = async () => {
+		const token = typeof window !== 'undefined' ? localStorage.getItem('token') : ''
+
+		if (token) {
+			tokenAuth(token)
+		}
+
+		try {
+			const resp = await clientAxios('/api/auth')
+			dispatch({
+				type: USER_AUTHENTICATE,
+				payload: resp.data.user,
+			})
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	return (
