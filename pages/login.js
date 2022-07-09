@@ -2,8 +2,14 @@ import React from 'react'
 import Layout from '../components/layout'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import useAuth from '../context/auth/authState'
+
+import Alert from '../components/alert'
 
 const Login = () => {
+
+	const { message, userLogin } = useAuth()
+
 	const formik = useFormik({
 		initialValues: {
 			email: '',
@@ -16,7 +22,7 @@ const Login = () => {
 			password: Yup.string().required('La contraseña no puede ir vacia'),
 		}),
 		onSubmit: (values) => {
-			console.log('Enviando formulario', values)
+			userLogin(values)
 		},
 	})
 
@@ -28,10 +34,12 @@ const Login = () => {
 				</h2>
 				<div className='flex justify-center mt-5'>
 					<div className='w-full max-w-lg'>
+
+						{message && <Alert />}
+
 						<form
 							className='bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4'
 							onSubmit={formik.handleSubmit}>
-
 							<div className='mb-4'>
 								<label
 									className='block text-black text-sm font-bold mb-2'
