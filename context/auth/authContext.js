@@ -7,6 +7,8 @@ import {
 	REGISTER_SUCCESS,
 	REGISTER_FAILED,
 	CLEANING_ALERT_MESSAGE,
+	LOGIN_SUCCESS,
+	LOGIN_FAILED,
 } from '../types'
 
 const AuthContext = createContext()
@@ -43,6 +45,29 @@ const AuthProvider = ({ children }) => {
 		}
 	}
 
+	const userLogin = async data => {
+		try {
+			const resp = await clientAxios.post('/api/auth', data)
+			console.log(resp)
+			// dispatch({
+			// 	type: LOGIN_SUCCESS,
+			// 	payload: resp.data,
+			// })
+		} catch (error) {
+			console.log(error.response.data.msg)
+			dispatch({
+				type: LOGIN_FAILED,
+				payload: error.response.data.msg,
+			})
+		} finally {
+			setTimeout(() => {
+				dispatch({
+					type: CLEANING_ALERT_MESSAGE,
+				})
+			}, 3000)
+		}
+	}
+
 	const userAuthenticated = (name) => {
 		dispatch({
 			type: USER_AUTHENTICATE,
@@ -59,6 +84,7 @@ const AuthProvider = ({ children }) => {
 				message: state.message,
 				userAuthenticated,
 				registerUser,
+				userLogin,
 			}}>
 			{children}
 		</AuthContext.Provider>
