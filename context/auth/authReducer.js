@@ -3,6 +3,8 @@ import {
 	REGISTER_SUCCESS,
 	REGISTER_FAILED,
 	CLEANING_ALERT_MESSAGE,
+	LOGIN_SUCCESS,
+	LOGIN_FAILED,
 } from '../types'
 
 const authReducer = (state, action) => {
@@ -26,6 +28,15 @@ const authReducer = (state, action) => {
 			return {
 				...state,
 				message: null,
+			}
+		case LOGIN_SUCCESS:
+			return {
+				...state,
+			}
+		case LOGIN_FAILED:
+			return {
+				...state,
+				message: action.payload,
 			}
 		default:
 			return state
