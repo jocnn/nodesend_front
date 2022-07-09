@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../components/layout'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import useAuth from '../context/auth/authState'
+import { useRouter } from 'next/router'
 
 import Alert from '../components/alert'
 
+const router = null
+	
 const Login = () => {
 
-	const { message, userLogin } = useAuth()
+	const { authenticated, message, userLogin } = useAuth()
+	router = useRouter()
+
+	useEffect(() => {
+		if (authenticated) {
+			router.push('/')
+		}
+	}, [authenticated])
 
 	const formik = useFormik({
 		initialValues: {
