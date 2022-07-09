@@ -30,8 +30,11 @@ const authReducer = (state, action) => {
 				message: null,
 			}
 		case LOGIN_SUCCESS:
+			localStorage.setItem('token', action.payload)
 			return {
 				...state,
+				token: action.payload,
+				authenticated: true,
 			}
 		case LOGIN_FAILED:
 			return {
