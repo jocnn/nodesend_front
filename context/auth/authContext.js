@@ -14,7 +14,7 @@ import {
 const AuthContext = createContext()
 
 const initialState = {
-	token: '',
+	token: typeof window !== 'undefined' ? localStorage.getItem('token') : '',
 	authenticated: null,
 	user: null,
 	message: null,
@@ -48,11 +48,11 @@ const AuthProvider = ({ children }) => {
 	const userLogin = async data => {
 		try {
 			const resp = await clientAxios.post('/api/auth', data)
-			console.log(resp)
-			// dispatch({
-			// 	type: LOGIN_SUCCESS,
-			// 	payload: resp.data,
-			// })
+			console.log(resp.data.token)
+			dispatch({
+				type: LOGIN_SUCCESS,
+				payload: resp.data.token,
+			})
 		} catch (error) {
 			console.log(error.response.data.msg)
 			dispatch({
