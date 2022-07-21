@@ -5,6 +5,7 @@ import {
 	CLEANING_ALERT_MESSAGE,
 	LOGIN_SUCCESS,
 	LOGIN_FAILED,
+	LOGOUT_SUCCESS,
 } from '../types'
 
 const authReducer = (state, action) => {
@@ -40,6 +41,14 @@ const authReducer = (state, action) => {
 			return {
 				...state,
 				message: action.payload,
+			}
+		case LOGOUT_SUCCESS:
+			localStorage.removeItem('token')
+			return {
+				...state,
+				token: null,
+				authenticated: null,
+				user: null,
 			}
 		default:
 			return state

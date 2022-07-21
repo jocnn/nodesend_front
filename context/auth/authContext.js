@@ -10,18 +10,21 @@ import {
 	CLEANING_ALERT_MESSAGE,
 	LOGIN_SUCCESS,
 	LOGIN_FAILED,
+	LOGOUT_SUCCESS,
 } from '../types'
 
 const AuthContext = createContext()
 
-const initialState = {
-	token: typeof window !== 'undefined' ? localStorage.getItem('token') : '',
-	authenticated: null,
-	user: null,
-	message: null,
-}
-
 const AuthProvider = ({ children }) => {
+
+	const initialState = {
+		token:
+			typeof window !== 'undefined' ? localStorage.getItem('token') : '',
+		authenticated: false,
+		user: null,
+		message: null,
+	}
+	
 	const [state, dispatch] = useReducer(authReducer, initialState)
 
 	const registerUser = async (data) => {
@@ -46,7 +49,7 @@ const AuthProvider = ({ children }) => {
 		}
 	}
 
-	const userLogin = async data => {
+	const userLogin = async (data) => {
 		try {
 			const resp = await clientAxios.post('/api/auth', data)
 			console.log(resp.data.token)
@@ -70,7 +73,8 @@ const AuthProvider = ({ children }) => {
 	}
 
 	const userAuthenticated = async () => {
-		const token = typeof window !== 'undefined' ? localStorage.getItem('token') : ''
+		const token =
+			typeof window !== 'undefined' ? localStorage.getItem('token') : ''
 
 		if (token) {
 			tokenAuth(token)
@@ -83,8 +87,17 @@ const AuthProvider = ({ children }) => {
 				payload: resp.data.user,
 			})
 		} catch (error) {
-			console.log(error)
+			dispatch({
+				type: USER_AUTHENTICATE,
+				payload: error.response.data.msg,
+			})
 		}
+	}
+
+	const userLogout = () => {
+		dispatch({
+			type: LOGOUT_SUCCESS
+		})
 	}
 
 	return (
@@ -97,6 +110,7 @@ const AuthProvider = ({ children }) => {
 				userAuthenticated,
 				registerUser,
 				userLogin,
+				userLogout,
 			}}>
 			{children}
 		</AuthContext.Provider>
