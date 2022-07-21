@@ -7,18 +7,16 @@ import { useRouter } from 'next/router'
 
 import Alert from '../components/alert'
 
-const router = null
-	
 const Login = () => {
 
 	const { authenticated, message, userLogin } = useAuth()
-	router = useRouter()
+	let router = useRouter()
 
 	useEffect(() => {
 		if (authenticated) {
 			router.push('/')
 		}
-	}, [authenticated])
+	}, [authenticated, router])
 
 	const formik = useFormik({
 		initialValues: {
